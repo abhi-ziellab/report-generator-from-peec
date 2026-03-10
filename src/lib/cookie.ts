@@ -4,12 +4,20 @@ const ALGORITHM = "aes-256-gcm";
 const IV_LENGTH = 12;
 const TAG_LENGTH = 16;
 
+// Auto-generated key used when COOKIE_SECRET is not set.
+// Persists for the lifetime of the server process — cookies invalidate on restart.
+let generatedKey: Buffer | null = null;
+
 function getSecret(): Buffer {
   const hex = process.env.COOKIE_SECRET;
-  if (!hex || hex.length !== 64) {
-    throw new Error("COOKIE_SECRET must be a 64-character hex string (32 bytes)");
+  if (hex && hex.length === 64) {
+    return Buffer.from(hex, "hex");
   }
-  return Buffer.from(hex, "hex");
+  if (!generatedKey) {
+    generatedKey = randomBytes(32);
+    console.warn("[cookie] No COOKIE_SECRET set — using auto-generated key. Sessions will reset on server restart.");
+  }
+  return generatedKey;
 }
 
 export function encrypt(plaintext: string): string {

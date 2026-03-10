@@ -41,25 +41,14 @@ Peec AI tracks how brands are represented in AI-generated responses. This report
 
 ```bash
 # Clone the repository
-git clone https://github.com/nickcaballero/report-builder.git
-cd report-builder
+git clone https://github.com/abhi-ziellab/report-generator-from-peec.git
+cd report-generator-from-peec
 
 # Install dependencies
 npm install
-
-# Create your environment file
-cp .env.example .env.local
 ```
 
-Edit `.env.local` and set your cookie encryption secret:
-
-```env
-# Generate a random secret:
-# node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
-COOKIE_SECRET=your_64_char_hex_string_here
-```
-
-### Run
+No environment variables are required to get started — the app auto-generates a cookie encryption key on startup. Just run:
 
 ```bash
 npm run dev
@@ -145,11 +134,11 @@ src/
 
 ## Configuration
 
-The only environment variable required is `COOKIE_SECRET` for encrypting API keys in cookies. All other configuration (API keys, report settings) is handled through the UI.
+No environment variables are required. API keys (Peec AI and Anthropic) are entered through the UI at runtime.
 
 | Variable | Required | Description |
 |----------|----------|-------------|
-| `COOKIE_SECRET` | Yes | 64-character hex string (32 bytes) for AES-256-GCM cookie encryption |
+| `COOKIE_SECRET` | No | 64-character hex string (32 bytes) for AES-256-GCM cookie encryption. If not set, a key is auto-generated on startup — sessions will reset on server restart. Set a fixed value in production for persistent sessions. |
 
 Generate one with:
 
@@ -173,7 +162,7 @@ npm i -g vercel
 vercel
 ```
 
-Set `COOKIE_SECRET` in your Vercel project's environment variables.
+Optionally set `COOKIE_SECRET` in your Vercel project's environment variables for persistent sessions across deploys.
 
 **Docker:**
 
