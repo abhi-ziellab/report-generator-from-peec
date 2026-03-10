@@ -1,0 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Serif+Display&display=swap');
+@import "tailwindcss";
+
+:root {
+  /* Peec AI brand palette — monochromatic charcoal + warm neutrals */
+  --peec-primary: #2b2b2b;
+  --peec-primary-dark: #1a1a1a;
+  --peec-secondary: #595959;
+  --peec-bg: #f7f7f5;
+  --peec-surface: #ffffff;
+  --peec-text: #1a1a1a;
+  --peec-text-muted: #737373;
+  --peec-border: #e8e8e6;
+  --peec-border-light: #f0f0ee;
+  --peec-success: #22c55e;
+  --peec-warning: #f59e0b;
+  --peec-error: #ef4444;
+
+  /* Typography */
+  --font-display: 'DM Serif Display', Georgia, serif;
+  --font-body: 'DM Sans', system-ui, -apple-system, sans-serif;
+
+  /* Chart palette */
+  --chart-1: #e74c3c;
+  --chart-2: #4f46e5;
+  --chart-3: #3b82f6;
+  --chart-4: #eab308;
+  --chart-5: #22c55e;
+  --chart-6: #8b5cf6;
+  --chart-7: #06b6d4;
+  --chart-8: #ec4899;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--peec-bg);
+  color: var(--peec-text);
+  letter-spacing: -0.01em;
+}
+
+@page {
+  margin: 0.5in 0.4in;
+  size: A4;
+}
+
+@media print {
+  body {
+    background: white;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .print-break-before {
+    break-before: page;
+  }
+
+  .print-break-inside-avoid {
+    break-inside: avoid;
+  }
+
+  /* Prevent orphaned headings — keep titles with content */
+  h2, h3, h4 {
+    break-after: avoid;
+    orphans: 3;
+    widows: 3;
+  }
+
+  /* Keep table rows together */
+  tr {
+    break-inside: avoid;
+  }
+
+  /* Prevent widow/orphan paragraphs */
+  p {
+    orphans: 2;
+    widows: 2;
+  }
+
+  .recharts-tooltip-wrapper {
+    display: none !important;
+  }
+
+  .recharts-responsive-container {
+    break-inside: avoid;
+  }
+}
