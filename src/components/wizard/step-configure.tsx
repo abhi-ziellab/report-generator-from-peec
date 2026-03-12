@@ -230,7 +230,8 @@ export function StepConfigure() {
                           <button
                             key={tag.id}
                             onClick={() => toggleTag(tag.id)}
-                            className={`rounded-full px-3 py-1 text-sm border transition-colors ${
+                            title={tag.name}
+                            className={`max-w-[200px] truncate rounded-full px-3 py-1 text-sm border transition-colors ${
                               selected
                                 ? "border-[var(--peec-primary)] bg-[var(--peec-bg)] text-[var(--peec-text)]"
                                 : "border-[var(--peec-border)] text-[var(--peec-text-muted)] hover:border-[var(--peec-secondary)]"
@@ -259,7 +260,8 @@ export function StepConfigure() {
                     <button
                       key={tag.id}
                       onClick={() => toggleTag(tag.id)}
-                      className={`rounded-full px-3 py-1 text-sm border transition-colors ${
+                      title={tag.name}
+                      className={`max-w-[200px] truncate rounded-full px-3 py-1 text-sm border transition-colors ${
                         selected
                           ? "border-[var(--peec-primary)] bg-[var(--peec-bg)] text-[var(--peec-text)]"
                           : "border-[var(--peec-border)] text-[var(--peec-text-muted)] hover:border-[var(--peec-secondary)]"
