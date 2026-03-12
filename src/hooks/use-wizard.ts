@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useReducer, type Dispatch, type ReactNode } from "react";
-import type { Brand, GeneratedReport, Model, Project, Prompt, ReportConfig, WizardState } from "@/lib/types";
+import type { Brand, GeneratedReport, Model, Project, Prompt, ReportConfig, Tag, WizardState } from "@/lib/types";
 import React from "react";
 
 const initialConfig: ReportConfig = {
@@ -19,6 +19,7 @@ const initialState: WizardState = {
   brands: [],
   models: [],
   prompts: [],
+  tags: [],
   config: initialConfig,
   report: null,
   loading: false,
@@ -31,7 +32,7 @@ type WizardAction =
   | { type: "SET_AUTH"; apiKey: string; projectId: string; projectName: string; brands: Brand[] }
   | { type: "SET_AUTH_ACCOUNT"; apiKey: string; projects: Project[] }
   | { type: "SET_PROJECT"; projectId: string; projectName: string; brands: Brand[] }
-  | { type: "SET_METADATA"; brands: Brand[]; models: Model[]; prompts: Prompt[] }
+  | { type: "SET_METADATA"; brands: Brand[]; models: Model[]; prompts: Prompt[]; tags: Tag[] }
   | { type: "SET_REPORT_TYPE"; reportType: ReportConfig["reportType"] }
   | { type: "SET_CONFIG"; config: Partial<ReportConfig> }
   | { type: "SET_LOADING"; loading: boolean }
@@ -84,6 +85,7 @@ function wizardReducer(state: WizardState, action: WizardAction): WizardState {
         brands: action.brands,
         models: action.models,
         prompts: action.prompts,
+        tags: action.tags,
       };
     case "SET_REPORT_TYPE":
       return {

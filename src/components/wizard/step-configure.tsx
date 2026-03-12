@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useWizard } from "@/hooks/use-wizard";
 import { getDatePreset, getPreviousPeriod, formatDateRange } from "@/lib/utils";
 import { LogoUpload } from "./logo-upload";
@@ -32,6 +32,8 @@ export function StepConfigure() {
     dispatch({ type: "SET_CONFIG", config: { startDate: range.start, endDate: range.end } });
   };
 
+  const [tagsExpanded, setTagsExpanded] = useState(false);
+
   const toggleBrand = (brandId: string) => {
     const current = config.brandIds ?? [];
     const next = current.includes(brandId)
@@ -39,6 +41,24 @@ export function StepConfigure() {
       : [...current, brandId];
     dispatch({ type: "SET_CONFIG", config: { brandIds: next.length > 0 ? next : undefined } });
   };
+
+  const toggleTag = (tagId: string) => {
+    const current = config.tagIds ?? [];
+    const next = current.includes(tagId)
+      ? current.filter((id) => id !== tagId)
+      : [...current, tagId];
+    dispatch({ type: "SET_CONFIG", config: { tagIds: next.length > 0 ? next : undefined } });
+  };
+
+  const promptCountByTag = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const prompt of state.prompts) {
+      for (const tagRef of prompt.tags) {
+        counts.set(tagRef.id, (counts.get(tagRef.id) ?? 0) + 1);
+      }
+    }
+    return counts;
+  }, [state.prompts]);
 
   const handleNext = () => {
     dispatch({ type: "SET_STEP", step: 5 });
@@ -181,6 +201,78 @@ export function StepConfigure() {
               </div>
             </div>
           )}
+
+        {/* Tag selection (all report types) */}
+        {state.tags.length > 0 && (
+          <div className="mb-6">
+            <label className="block text-sm font-medium mb-2">
+              Categories (Tags){" "}
+              {!config.tagIds?.length && (
+                <span className="font-normal text-[var(--peec-text-muted)]">(all selected by default)</span>
+              )}
+            </label>
+            {state.tags.length > 6 ? (
+              <>
+                {!tagsExpanded ? (
+                  <button
+                    onClick={() => setTagsExpanded(true)}
+                    className="text-sm text-[var(--peec-primary)] hover:underline"
+                  >
+                    {state.tags.length} tags available — click to filter
+                  </button>
+                ) : (
+                  <>
+                    <div className="flex flex-wrap gap-2">
+                      {state.tags.map((tag) => {
+                        const selected = !config.tagIds?.length || config.tagIds.includes(tag.id);
+                        const count = promptCountByTag.get(tag.id) ?? 0;
+                        return (
+                          <button
+                            key={tag.id}
+                            onClick={() => toggleTag(tag.id)}
+                            className={`rounded-full px-3 py-1 text-sm border transition-colors ${
+                              selected
+                                ? "border-[var(--peec-primary)] bg-[var(--peec-bg)] text-[var(--peec-text)]"
+                                : "border-[var(--peec-border)] text-[var(--peec-text-muted)] hover:border-[var(--peec-secondary)]"
+                            }`}
+                          >
+                            {tag.name} ({count})
+                          </button>
+                        );
+                      })}
+                    </div>
+                    <button
+                      onClick={() => setTagsExpanded(false)}
+                      className="mt-2 text-xs text-[var(--peec-text-muted)] hover:text-[var(--peec-text)]"
+                    >
+                      Collapse
+                    </button>
+                  </>
+                )}
+              </>
+            ) : (
+              <div className="flex flex-wrap gap-2">
+                {state.tags.map((tag) => {
+                  const selected = !config.tagIds?.length || config.tagIds.includes(tag.id);
+                  const count = promptCountByTag.get(tag.id) ?? 0;
+                  return (
+                    <button
+                      key={tag.id}
+                      onClick={() => toggleTag(tag.id)}
+                      className={`rounded-full px-3 py-1 text-sm border transition-colors ${
+                        selected
+                          ? "border-[var(--peec-primary)] bg-[var(--peec-bg)] text-[var(--peec-text)]"
+                          : "border-[var(--peec-border)] text-[var(--peec-text-muted)] hover:border-[var(--peec-secondary)]"
+                      }`}
+                    >
+                      {tag.name} ({count})
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       <div className="flex items-center justify-between">

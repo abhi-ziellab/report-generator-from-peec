@@ -42,6 +42,7 @@ export function StepSelectProject() {
         brands: meta.brands ?? [],
         models: meta.models ?? [],
         prompts: meta.prompts ?? [],
+        tags: meta.tags ?? [],
       });
     } catch {
       dispatch({ type: "SET_ERROR", error: "Network error. Please try again." });

@@ -61,6 +61,7 @@ export function StepApiKey() {
             brands: meta.brands,
             models: meta.models,
             prompts: meta.prompts,
+            tags: meta.tags ?? [],
           });
         }
       }

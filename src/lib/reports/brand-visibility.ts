@@ -14,10 +14,14 @@ export async function fetchBrandVisibilityData(
     end_date: config.endDate,
   };
 
-  if (config.brandIds && config.brandIds.length > 0) {
-    const filter: ReportFilter = { field: "brand_id", operator: "in", values: config.brandIds };
-    baseBody.filters = [filter];
+  const filters: ReportFilter[] = [];
+  if (config.brandIds?.length) {
+    filters.push({ field: "brand_id", operator: "in", values: config.brandIds });
   }
+  if (config.tagIds?.length) {
+    filters.push({ field: "tag_id", operator: "in", values: config.tagIds });
+  }
+  if (filters.length > 0) baseBody.filters = filters;
 
   const isComprehensive = config.reportScope === "comprehensive";
 

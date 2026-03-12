@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PeecApiClient } from "@/lib/peecai-client";
 import { decrypt } from "@/lib/cookie";
-import type { Brand, Model, Prompt } from "@/lib/types";
+import type { Brand, Model, Prompt, Tag } from "@/lib/types";
 
 export async function GET(request: NextRequest) {
   try {
@@ -18,13 +18,14 @@ export async function GET(request: NextRequest) {
 
     const client = new PeecApiClient(apiKey);
 
-    const [brands, models, prompts] = await Promise.all([
+    const [brands, models, prompts, tags] = await Promise.all([
       client.get<Brand[]>("/brands", { project_id: projectId, limit: 1000 }),
       client.get<Model[]>("/models", { project_id: projectId, limit: 1000 }),
       client.get<Prompt[]>("/prompts", { project_id: projectId, limit: 1000 }),
+      client.get<Tag[]>("/tags", { project_id: projectId, limit: 1000 }),
     ]);
 
-    return NextResponse.json({ brands, models, prompts });
+    return NextResponse.json({ brands, models, prompts, tags });
   } catch (e) {
     const message = e instanceof Error ? e.message : "Unknown error";
     return NextResponse.json({ error: message }, { status: 500 });

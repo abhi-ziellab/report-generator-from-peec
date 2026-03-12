@@ -143,6 +143,7 @@ export interface ReportConfig {
   startDate: string;
   endDate: string;
   brandIds?: string[];
+  tagIds?: string[];
   dimensions?: string[];
   classifications?: string[];
   compareWithPrevious?: boolean;
@@ -157,6 +158,7 @@ export interface WizardState {
   brands: Brand[];
   models: Model[];
   prompts: Prompt[];
+  tags: Tag[];
   config: ReportConfig;
   report: GeneratedReport | null;
   loading: boolean;

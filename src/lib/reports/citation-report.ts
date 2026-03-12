@@ -13,11 +13,14 @@ export async function fetchCitationData(
     end_date: config.endDate,
   };
 
-  if (config.classifications && config.classifications.length > 0) {
-    baseBody.filters = [
-      { field: "classification", operator: "in", values: config.classifications },
-    ];
+  const filters: { field: string; operator: string; values: string[] }[] = [];
+  if (config.classifications?.length) {
+    filters.push({ field: "classification", operator: "in", values: config.classifications });
   }
+  if (config.tagIds?.length) {
+    filters.push({ field: "tag_id", operator: "in", values: config.tagIds });
+  }
+  if (filters.length > 0) baseBody.filters = filters;
 
   const isComprehensive = config.reportScope === "comprehensive";
 
